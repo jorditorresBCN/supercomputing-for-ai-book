@@ -7,7 +7,7 @@ title: Supercomputing for AI
 description: Foundations, Architectures, and Scaling Deep Learning Workloads
 author: Jordi Torres
 
-logo: "assets/images/logo/bookCover.jpg"
+logo: "assets/images/logo/media/bookCover.jpg"
 
 # --- El Tema ---
 remote_theme: just-the-docs/just-the-docs
