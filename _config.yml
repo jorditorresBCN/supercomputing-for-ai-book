@@ -1,34 +1,19 @@
-# _config.yml
-
-# --- Configuración básica (Mantenemos lo que funcionaba) ---
+title: Supercomputing for AI
+description: Foundations, Architectures, and Scaling Deep Learning Workloads
+author: Jordi Torres
 url: "https://JordiTorresBCN.github.io"
 baseurl: "/supercomputing-for-ai-book"
 
-title: Supercomputing for AI
-
-# La barra vertical (|) permet escriure en vàries línies
-description: |
-  <br>
-  <b>Reference:</b><br>
-  Jordi Torres, <i>Supercomputing for Artificial Intelligence: Foundations, Architectures, and Scaling Deep Learning</i>, 
-  WATCH THIS SPACE Book Series, 2026 (2n edition).<br>
-  <span style="font-size:0.8em; color:#666;">ISBN 979-831932835-9</span>
-  <br><br>
-  <a href="https://www.amazon.com/dp/B0DJCMK8W1" target="_blank" style="text-decoration:underline;">Buy on Amazon</a>
-  
-author: Jordi Torres
-
+# Ruta exacta de tu logo
 logo: "assets/images/logo/media/bookCover.jpg"
 
-# --- El Tema ---
 remote_theme: just-the-docs/just-the-docs
 color_scheme: light
-# --- resaltat de codi
+
 kramdown:
   syntax_highlighter: rouge
 
 plugins:
   - jekyll-remote-theme
 
-# --- Archivos a ignorar ---
 exclude: [Chapter01.docx, Chapter12.docx, Titulo.docx, Gemfile, Gemfile.lock, assets/css]
