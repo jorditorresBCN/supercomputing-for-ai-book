@@ -7,6 +7,7 @@ has_children: false
 
 # 12. Parallelizing Model Training with Distributed Data Parallel
 
+* TOC
 {:toc}
 
 This chapter assumes that the reader has already studied and worked through Chapter 11, where training efficiency was analyzed and optimized on a single GPU. Concepts such as batch size tuning, DataLoader performance, mixed precision, and balanced pipelines are taken as established knowledge.
