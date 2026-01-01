@@ -1,61 +1,53 @@
 <style>
-  /* 1. Centrar imágenes del contenido */
-  .main-content img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 100%;
-  }
-
-  /* 2. Títulos H4 (Corregido el tamaño) */
-  .main-content h4 {
-    text-transform: none;
-    font-weight: bold;
-    font-size: 1.1em;   /* He cambiado 3.9em por 1.1em */
-    color: #505050;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    letter-spacing: normal;
-  }
-
-  /* 3. PEUS DE FOTO (Opcional, estilo gris para cursivas) */
-  .main-content p strong em, 
-  .main-content p em strong {
-    display: block;
-    text-align: center;
-    color: #666;
-    font-style: italic;
-    font-weight: normal;
-    font-size: 0.9em;
-    margin-top: -10px;
-  }
-  
-  /* 4. TASKS (Cajas grises para tareas con >) */
-  .main-content blockquote {
-    border-left: 5px solid #505050;
-    background-color: #f6f8fa;
-    color: #24292e;
-    padding: 15px 20px;
-    margin: 20px 0;
-    font-style: normal;
-    font-size: 0.95em;
-  }
-  .main-content blockquote h4 {
-    margin-top: 0;
-  }
-
-  /* 5. BARRA LATERAL: Portada grande */
+  /* 1. Agrandar la Portada (Logo) */
   .site-brand img {
     max-height: none !important;
     width: 100% !important;
-    max-width: 220px !important; /* Un poco más grande */
-    margin-bottom: 15px;
+    max-width: 200px !important;
+    margin-bottom: 5px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border: 1px solid #eee;
   }
-
-  /* Ocultar el título de texto de la barra lateral (porque ya sale en la foto) */
+  
+  /* Ocultar el título de texto de la barra lateral (ya sale en la foto) */
   .site-brand .site-title {
     display: none;
   }
+
+  /* 2. Ajustar títulos H4 del contenido */
+  .main-content h4 {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #505050;
+    margin-top: 20px;
+  }
+
+  /* 3. Ajustar imágenes del contenido */
+  .main-content img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+  }
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Definimos el texto que quieres mostrar
+    var textoReferencia = `
+        <div style="font-size:0.85em; color:#333; line-height:1.4; margin-bottom:20px;">
+            <br>
+            <b>Reference:</b><br>
+            Jordi Torres, <i>Supercomputing for Artificial Intelligence</i>, 
+            WATCH THIS SPACE Book Series, 2025.<br>
+            <span style="font-size:0.9em; color:#666;">ISBN 979-831932835-9</span>
+            <br><br>
+            <a href="https://www.amazon.com/dp/B0DJCMK8W1" target="_blank" style="text-decoration:underline; color:#0366d6;">Buy on Amazon</a>
+        </div>
+    `;
+
+    // Buscamos la zona del logo e inyectamos el texto justo después
+    var logoArea = document.querySelector('.site-brand');
+    if(logoArea) {
+        logoArea.insertAdjacentHTML('beforeend', textoReferencia);
+    }
+});
+</script>
