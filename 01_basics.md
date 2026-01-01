@@ -249,7 +249,7 @@ This form of parallelism is referred to as
 *concurrency*<span class="indexref" entry="Concurrency"></span>, and it
 enables efficient utilization of the available computing resources.
 
-#### <img src="assets/images/ch01/media/image2.png"
+<img src="assets/images/ch01/media/image2.png"
 style="width:5.11875in;height:1.14931in"
 alt="A diagram of instructions AI-generated content may be incorrect." />
 
