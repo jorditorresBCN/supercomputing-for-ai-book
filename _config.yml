@@ -3,23 +3,31 @@
 # --- Configuración básica (Mantenemos lo que funcionaba) ---
 url: "https://JordiTorresBCN.github.io"
 baseurl: "/supercomputing-for-ai-book"
+
 title: Supercomputing for AI
-description: Foundations, Architectures, and Scaling Deep Learning Workloads
+
+# La barra vertical (|) permet escriure en vàries línies
+description: |
+  <br>
+  <b>Reference:</b><br>
+  Jordi Torres, <i>Supercomputing for Artificial Intelligence: Foundations, Architectures, and Scaling Deep Learning</i>, 
+  WATCH THIS SPACE Book Series, 2026 (2n edition).<br>
+  <span style="font-size:0.8em; color:#666;">ISBN 979-831932835-9</span>
+  <br><br>
+  <a href="https://www.amazon.com/dp/B0DJCMK8W1" target="_blank" style="text-decoration:underline;">Buy on Amazon</a>
+  
+  description: Foundations, Architectures, and Scaling Deep Learning Workloads
 author: Jordi Torres
 
 logo: "assets/images/logo/media/bookCover.jpg"
 
 # --- El Tema ---
 remote_theme: just-the-docs/just-the-docs
-
-# --- SOLUCIÓN PROBLEMA 1: Forzar tema claro (fondo blanco) ---
 color_scheme: light
-
-# --- SOLUCIÓN PROBLEMA 2: Configurar resaltado de código ---
+# --- resaltat de codi
 kramdown:
   syntax_highlighter: rouge
 
-# --- Plugins necesarios ---
 plugins:
   - jekyll-remote-theme
 
