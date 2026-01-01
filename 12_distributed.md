@@ -68,7 +68,7 @@ Let us now examine these components in more detail through a concrete scenario: 
 
 *torchrun* is the recommended entry point for launching PyTorch programs in a distributed training setup. It does not perform training itself, nor does it participate in the training pipeline. Instead, its role is to *initialize the distributed execution context* so that DistributedDataParallel (DDP) can operate correctly.
 
-<img src="media/image1.png" style="width:5.11875in;height:5.22292in" alt="A diagram of a software process AI-generated content may be incorrect." />
+<img src="assets/images/ch12/media/image1.png" style="width:5.11875in;height:5.22292in" alt="A diagram of a software process AI-generated content may be incorrect." />
 
 Figure 12.1 – Distributed training in PyTorch: layered architecture and execution flow. The figure highlights the separation between fixed, one-time coordination steps (resource allocation via SLURM and process launch and rendezvous via torchrun) and the recurring training pipeline executed at each iteration (computation with DDP and gradient synchronization via NCCL).
 
@@ -86,17 +86,13 @@ The rendezvous phase deserves particular attention. All participating processes 
 
 A typical torchrun invocation for a job spanning two nodes with four GPUs per node is shown below:
 
-torchrun \\
 
---nproc_per_node=4 \\
-
---nnodes=2 \\
-
---rdzv_backend=c10d \\
-
---rdzv_endpoint=node0:29400 \\
-
-train.py
+    torchrun \
+      --nproc_per_node=4 \
+      --nnodes=2 \
+      --rdzv_backend=c10d \
+      --rdzv_endpoint=node0:29400 \
+      train.py
 
 In this example, the *c10d backend*—PyTorch’s default rendezvous backend—is used. It operates over TCP and provides robust inter-node discovery. All processes, regardless of the node on which they run, connect to the same rendezvous endpoint, which acts as the coordination point for the distributed session.
 
@@ -127,7 +123,7 @@ During training, DDP performs the following key operations:
 
 A visual representation of this workflow, assuming a single node with four GPUs, is shown in Figure 12.2. Each GPU runs its own process, processes a separate batch of data, and participates in the synchronization step to ensure consistent model updates.
 
-<img src="media/image2.png" style="width:5.11875in;height:1.93889in" alt="A diagram of a computer system AI-generated content may be incorrect." />
+<img src="assets/images/ch12/media/image2.png" style="width:5.11875in;height:1.93889in" alt="A diagram of a computer system AI-generated content may be incorrect." />
 
 Figure 12.2 – Data-parallel training with DDP on a single node with four GPUs*.* Each GPU runs a separate process and receives different input batches. After the forward and backward passes, gradients are synchronized across processes to ensure consistent model updates.
 
@@ -147,15 +143,13 @@ Figure 12.3 illustrates a typical DDP setup involving two compute nodes with two
 
 The typical training script using DDP includes the following minimal setup:
 
-def setup(global_rank, world_size):
 
-dist.init_process_group(backend="nccl", rank=global_rank, world_size=world_size)
+    def setup(global_rank, world_size):
+        dist.init_process_group(backend="nccl", rank=global_rank, world_size=world_size)
 
-device = torch.device("cuda:" + str(local_rank))
-
-model = Net().to(device)
-
-model = DDP(model, device_ids=\[local_rank\])
+    device = torch.device("cuda:" + str(local_rank))
+    model = Net().to(device)
+    model = DDP(model, device_ids=[local_rank])
 
 This snippet illustrates the basic steps:
 
@@ -171,7 +165,7 @@ The key scalability question is therefore not whether DDP works—it does—but 
 
 As a result, the central scalability criterion in DDP is not the number of GPUs used, but the ratio between per-iteration computation and per-iteration communication. This ratio determines whether adding GPUs leads to effective scaling or simply amplifies coordination overhead.
 
-<img src="media/image3.png" style="width:5.11875in;height:3.33636in" alt="A diagram of a computer server AI-generated content may be incorrect." />
+<img src="assets/images/ch12/media/image3.png" style="width:5.11875in;height:3.33636in" alt="A diagram of a computer server AI-generated content may be incorrect." />
 
 Figure 12.3 – DDP setup across two nodes, each with two GPUs. Each GPU is assigned a unique process. local_rank identifies the GPU index within a node, while rank corresponds to the global identifier across all processes. Communication and synchronization are handled transparently by DDP. (Image source: Horovod).
 
@@ -183,29 +177,20 @@ If not properly handled, two or more processes may read the same data, resulting
 
 To enable distributed data loading, PyTorch provides the torch.utils.data.DistributedSampler class, which partitions the dataset across processes, shuffles the data before each epoch, and ensures that each process sees a mutually exclusive subset. A typical usage looks like this:
 
-sampler = torch.utils.data.distributed.DistributedSampler(
 
-train_dataset,
+    sampler = torch.utils.data.distributed.DistributedSampler(
+        train_dataset,
+        num_replicas=world_size,
+        rank=global_rank,
+        shuffle=True
+    )
 
-num_replicas=world_size,
-
-rank=global_rank,
-
-shuffle=True
-
-)
-
-train_loader = torch.utils.data.DataLoader(
-
-train_dataset,
-
-sampler=sampler,
-
-batch_size=batch_size,
-
-num_workers=4
-
-)
+    train_loader = torch.utils.data.DataLoader(
+        train_dataset,
+        sampler=sampler,
+        batch_size=batch_size,
+        num_workers=4
+    )
 
 The key idea is that DDP does not split the dataset automatically—you must explicitly provide a sampler. In each epoch, the sampler shuffles the dataset (if shuffle=True), splits it into num_replicas partitions, and assigns each one according to the process's rank.
 
@@ -215,39 +200,35 @@ From a pipeline perspective, dataset sharding directly influences batch granular
 
 To ensure proper shuffling, you must call sampler.set_epoch(epoch) at the beginning of each epoch:
 
-for epoch in range(num_epochs):
 
-sampler.set_epoch(epoch)
-
-for batch in train_loader:
-
-...
+    for epoch in range(num_epochs):
+        sampler.set_epoch(epoch)
+        for batch in train_loader:
+            ...
 
 Failing to call set_epoch() would cause all processes to load the same batch sequence in each epoch, which defeats the purpose of parallel training.
 
 In distributed environments, it is common for all processes to share the same filesystem. Downloading the dataset in every process could lead to file corruption or race conditions. The correct approach is:
 
-download = True if local_rank == 0 else False
 
-train_set = torchvision.datasets.MNIST("./data", download=download)
+    download = True if local_rank == 0 else False
+    train_set = torchvision.datasets.MNIST("./data", download=download)
 
 Or, using explicit synchronization (similar to MPI):
 
-if local_rank == 0:
 
-torchvision.datasets.MNIST("./data", download=True)
-
-dist.barrier()
-
-train_set = torchvision.datasets.MNIST("./data", download=False)
+    if local_rank == 0:
+        torchvision.datasets.MNIST("./data", download=True)
+    dist.barrier()
+    train_set = torchvision.datasets.MNIST("./data", download=False)
 
 The dist.barrier() call ensures that no process starts accessing the dataset until it is fully downloaded and available.
 
 Finally, since DDP spawns one process per GPU, having every process print to standard output would create clutter. To avoid this, restrict logging and checkpoint saving to one designated process:
 
-if global_rank == 0:
 
-print(...)
+    if global_rank == 0:
+        print(...)
 
 This pattern ensures clean and centralized output during training.
 
@@ -265,55 +246,56 @@ While the train_ddp.py script shares much of its structure with the single-GPU v
 
 **Distributed Initialization**
 
-from torch.distributed import init_process_group
 
-init_process_group(backend="nccl")
+    from torch.distributed import init_process_group
+    init_process_group(backend="nccl")
 
 At the start of the script, a distributed process group is initialized using init_process_group(). This call sets up the communication backend among processes. The nccl backend is used here, as it provides high performance GPU communication primitives well-suited for NVIDIA hardware. This initialization is mandatory for DDP to function and must happen before any model wrapping or communication calls. The script then reads the global rank and world size from the environment, as passed by torchrun:
 
-world_size = int(os.environ\["WORLD_SIZE"\])
 
-rank = int(os.environ\["RANK"\])
+    world_size = int(os.environ["WORLD_SIZE"])
+    rank = int(os.environ["RANK"])
 
 As we already presented in this chapter, these values are used to determine which GPU the current process should operate on and how to split the dataset.
 
 **GPU Device Selection Per Process**
 
-device_id = rank % torch.cuda.device_count()
+
+    device_id = rank % torch.cuda.device_count()
 
 Each process is pinned to a specific GPU by computing its local device ID. This ensures that the model and data are loaded onto the appropriate device, and prevents conflicts between processes.
 
 **Distributed Data Loading**
 
-from torch.utils.data.distributed import DistributedSampler
 
-train_sampler = DistributedSampler(train_ds, num_replicas=world_size,
+    from torch.utils.data.distributed import DistributedSampler
 
-rank=rank, drop_last=True)
+    train_sampler = DistributedSampler(train_ds, num_replicas=world_size, 
+                                       rank=rank, drop_last=True)
 
 Instead of relying on random shuffling in DataLoader, the script uses a DistributedSampler to partition the dataset across all processes. Each process receives a unique, non-overlapping subset of the data.
 
 **Model Wrapping with DDP**
 
-model.to(device_id)
 
-model = DDP(model, device_ids=\[device_id\])
+    model.to(device_id)
+    model = DDP(model, device_ids=[device_id])
 
 Once the model is instantiated, it is moved to the appropriate GPU and wrapped with torch.nn.parallel.DistributedDataParallel. This wrapper intercepts the backward() call during training and performs automatic gradient averaging across all processes. As a result, all model replicas remain synchronized after each optimization step.
 
 If requested, the script also applies JIT compilation after wrapping:
 
-if args.compile:
 
-model = torch.compile(model, mode="reduce-overhead")
+    if args.compile:
+        model = torch.compile(model, mode="reduce-overhead")
 
 #### Metric Aggregation
 
-from torch.distributed import all_reduce, ReduceOp
 
-accuracy = torch.tensor(accuracy_score(references, predictions), device=device_id)
+    from torch.distributed import all_reduce, ReduceOp
 
-all_reduce(accuracy, op=ReduceOp.AVG)
+    accuracy = torch.tensor(accuracy_score(references, predictions), device=device_id)
+    all_reduce(accuracy, op=ReduceOp.AVG)
 
 Since each process only evaluates its local validation subset, final accuracy must be aggregated across all GPUs. This is achieved using all_reduce with the average operation (ReduceOp.AVG), yielding a global accuracy value consistent across all processes.
 
@@ -337,27 +319,18 @@ This logging is handled with rank-aware functions (log_rank), so only the proces
 
 Example output:
 
-INFO - \### model_name: vit
 
-INFO - \### num_workers: 8
-
-INFO - \### batch_size: 64
-
-INFO - \### mixed_precision: bf16
-
-INFO - \### compile: True
-
-INFO - \### optimizer: sgd
-
-INFO - \### dataset: micro-224
-
-INFO - \### Total number of parameters: 631M
-
-INFO - \[EPOCH: 3\] Accuracy: 0.431 \| Validation throughput: 512 imgs/s
-
-INFO - Training throughput: 1216 imgs/s
-
-INFO - GPU memory reserved: 29.8 GB
+    INFO - ### model_name: vit
+    INFO - ### num_workers: 8
+    INFO - ### batch_size: 64
+    INFO - ### mixed_precision: bf16
+    INFO - ### compile: True
+    INFO - ### optimizer: sgd
+    INFO - ### dataset: micro-224
+    INFO - ### Total number of parameters: 631M
+    INFO - [EPOCH: 3] Accuracy: 0.431 | Validation throughput: 512 imgs/s
+    INFO - Training throughput: 1216 imgs/s
+    INFO - GPU memory reserved: 29.8 GB
 
 The rest of the script—such as argument parsing, model construction, AMP handling, and training loop structure—remains virtually unchanged from the single-GPU version explained in Chapter 11. Refer to that section for detailed insights into these shared components.
 
@@ -369,41 +342,29 @@ All experiments in this chapter are launched using SLURM scripts. For instance, 
 
 #### SLURM Directives
 
-\#!/bin/bashiming gh
 
-\#SBATCH --job-name=ddp_tiny_2nodes_4gpus
-
-\#SBATCH --chdir=.
-
-\#SBATCH --output=./results/R-%x.%j.out
-
-\#SBATCH --error=./results/R-%x.%j.err
-
-\#SBATCH --nodes=2
-
-\#SBATCH --ntasks-per-node=1
-
-\#SBATCH --gres=gpu:4
-
-\#SBATCH --cpus-per-task=20
-
-\#SBATCH --time=01:30:00
-
-\#SBATCH --account=\<account\>
-
-\#SBATCH --qos=acc_debug
-
-\#SBATCH --exclusive
+    #!/bin/bashiming gh
+    #SBATCH --job-name=ddp_tiny_2nodes_4gpus
+    #SBATCH --chdir=.
+    #SBATCH --output=./results/R-%x.%j.out
+    #SBATCH --error=./results/R-%x.%j.err
+    #SBATCH --nodes=2
+    #SBATCH --ntasks-per-node=1
+    #SBATCH --gres=gpu:4
+    #SBATCH --cpus-per-task=20
+    #SBATCH --time=01:30:00
+    #SBATCH --account=<account>
+    #SBATCH --qos=acc_debug
+    #SBATCH --exclusive
 
 #### Container Setup and Environment
 
 As in Chapter 11, we rely on Singularity containers to ensure consistency:
 
-module purge
 
-module load singularity
-
-SINGULARITY_CONTAINER=/gpfs/apps/MN5/ACC/SINGULARITY/SRC/images/nvidiaPytorch24.07
+    module purge
+    module load singularity
+    SINGULARITY_CONTAINER=/gpfs/apps/MN5/ACC/SINGULARITY/SRC/images/nvidiaPytorch24.07
 
 This container includes all required software: CUDA, PyTorch, NCCL, and driver compatibility for H100 GPUs.
 
@@ -411,9 +372,9 @@ This container includes all required software: CUDA, PyTorch, NCCL, and driver c
 
 In order for torchrun to coordinate all participating processes, it requires a rendezvous address formed by an IP or hostname (MASTER_ADDR) and a port (MASTER_PORT). These environment variables must be set explicitly in the SLURM script before launching the job:
 
-MASTER_ADDR=\$(scontrol show hostnames \$SLURM_JOB_NODELIST \| head -n 1)
 
-MASTER_PORT=6000
+    MASTER_ADDR=$(scontrol show hostnames $SLURM_JOB_NODELIST | head -n 1)
+    MASTER_PORT=6000
 
 This configuration ensures that all processes, regardless of the node they are running on, can connect to the same rendezvous point—hosted on the first node in the SLURM allocation—using the designated port. This step is essential for establishing inter-process communication before training begins.
 
@@ -423,35 +384,23 @@ You may append this setup directly before the CMD definition to make sure torchr
 
 The script uses environment variables and flags to define the training configuration:
 
-MODEL="vit"
 
-DATASET="./datasets/tiny-224"
+    MODEL="vit"
+    DATASET="./datasets/tiny-224"
+    EPOCHS=5
+    BS=128
+    NW=10
+    OPTIM=sgd
 
-EPOCHS=5
-
-BS=128
-
-NW=10
-
-OPTIM=sgd
-
-PYTHON_ARGS="--model_name \$MODEL \\
-
---dataset \$DATASET \\
-
---num_epochs \$EPOCHS \\
-
---batch_size \$BS \\
-
---eval_batch_size \$BS \\
-
---num_workers \$NW \\
-
---optimizer \$OPTIM \\
-
---mixed_precision bf16 \\
-
---compile"
+    PYTHON_ARGS="--model_name $MODEL \
+                 --dataset $DATASET \
+                 --num_epochs $EPOCHS \
+                 --batch_size $BS \
+                 --eval_batch_size $BS \
+                 --num_workers $NW \
+                 --optimizer $OPTIM \
+                 --mixed_precision bf16 \
+                 --compile"
 
 Just as in Chapter 11, students can experiment by changing these variables directly in the SLURM file.
 
@@ -459,29 +408,23 @@ Just as in Chapter 11, students can experiment by changing these variables direc
 
 The key difference in distributed training is that instead of python train.py, we use torchrun to launch a process per GPU:
 
-LAUNCHER="torchrun \\
 
---nproc_per_node=4 \\
+    LAUNCHER="torchrun \
+        --nproc_per_node=4 \
+        --nnodes=2 \
+        --node_rank=$SLURM_PROCID \
+        --rdzv_endpoint=$MASTER_ADDR:$MASTER_PORT \
+        --rdzv_backend=c10d"
 
---nnodes=2 \\
-
---node_rank=\$SLURM_PROCID \\
-
---rdzv_endpoint=\$MASTER_ADDR:\$MASTER_PORT \\
-
---rdzv_backend=c10d"
-
-PYTHON_FILE="./train_ddp.py"
-
-export CMD="\$LAUNCHER \$PYTHON_FILE \$PYTHON_ARGS"
-
-SINGULARITY_ARGS="--nv \$SINGULARITY_CONTAINER"
+    PYTHON_FILE="./train_ddp.py"
+    export CMD="$LAUNCHER $PYTHON_FILE $PYTHON_ARGS"
+    SINGULARITY_ARGS="--nv $SINGULARITY_CONTAINER"
 
 Then the command is executed inside the container with:
 
-SRUN_ARGS="--cpus-per-task \$SLURM_CPUS_PER_TASK --jobid \$SLURM_JOB_ID"
 
-srun \$SRUN_ARGS singularity exec \$SINGULARITY_ARGS bash -c "\$CMD"
+    SRUN_ARGS="--cpus-per-task $SLURM_CPUS_PER_TASK --jobid $SLURM_JOB_ID"
+    srun $SRUN_ARGS singularity exec $SINGULARITY_ARGS bash -c "$CMD"
 
 torchrun takes care of launching one Python process per GPU, setting the proper environment variables (RANK, WORLD_SIZE, etc.), and managing inter-process communication.
 
@@ -530,13 +473,13 @@ Table 12.1 – ViT training on the micro-224 dataset: complete training time, th
 
 As shown in Table 12.1, training throughput increases significantly as the number of GPUs grows, from 240 images/s on a single GPU to 5205 images/s on 32 GPUs. This trend is visualized in Figure 12.4, which shows a near-linear increase in throughput with the number of GPUs.
 
-<img src="media/image4.png" style="width:5.11875in;height:2.88958in" alt="A graph with numbers and a bar AI-generated content may be incorrect." />
+<img src="assets/images/ch12/media/image4.png" style="width:5.11875in;height:2.88958in" alt="A graph with numbers and a bar AI-generated content may be incorrect." />
 
 Figure 12.4 – Training throughput (images per second) as a function of the number of GPUs for the micro-224 dataset.
 
 To better assess scalability, Figure 12.5 reports the measured speedup relative to the single-GPU baseline, together with the ideal linear speedup. While speedup increases steadily, the gap with respect to the ideal curve widens as more GPUs are added, indicating growing overheads.
 
-<img src="media/image5.png" style="width:5.11875in;height:2.95404in" alt="A graph with a line and a number of gpus AI-generated content may be incorrect." />
+<img src="assets/images/ch12/media/image5.png" style="width:5.11875in;height:2.95404in" alt="A graph with a line and a number of gpus AI-generated content may be incorrect." />
 
 Figure 12.5 – Measured speedup versus ideal linear speedup for ViT training on micro-224.
 
@@ -610,7 +553,8 @@ From a systems perspective, this is a pipeline effect: as the parallel portion a
 
 When examining the standard output from the 32-GPU run, we observe the following message:
 
-INFO - \### Total training samples (batches): 384 (3)
+
+    INFO - ### Total training samples (batches): 384 (3)
 
 This indicates that each process only handled 3 batches—an extremely small number in practice.
 
@@ -665,7 +609,7 @@ Table 12.5 – ViT training on tiny-224 dataset.
 
 In this case, each GPU processes a larger number of batches, providing a clearer picture of scalability, as illustrated in Figure 12.6, which compares the speedup achieved with both datasets. Compared to micro-224, both throughput and training time scale more linearly, as the larger dataset allows computation to dominate fixed and communication overheads. This highlights the critical role of dataset size when evaluating distributed training performance.
 
-<img src="media/image6.png" style="width:4.95864in;height:2.93276in" alt="A graph of a speed up and number of gpus AI-generated content may be incorrect." />
+<img src="assets/images/ch12/media/image6.png" style="width:4.95864in;height:2.93276in" alt="A graph of a speed up and number of gpus AI-generated content may be incorrect." />
 
 Figure 12.6 – Speedup vs. number of GPUs.
 
@@ -851,7 +795,7 @@ This behavior is not contradictory. Efficiency is a relative metric that measure
 
 Figure 12.7 visualizes this trade-off by plotting throughput and efficiency on the same graph. Throughput continues to increase almost linearly with the number of GPUs (solid black line), while efficiency decreases more gradually (dashed gray line). Together, these curves illustrate the fundamental tension between scalability and absolute performance.
 
-<img src="media/image7.png" style="width:5.11875in;height:2.97222in" alt="A graph of a graph with a line AI-generated content may be incorrect." />
+<img src="assets/images/ch12/media/image7.png" style="width:5.11875in;height:2.97222in" alt="A graph of a graph with a line AI-generated content may be incorrect." />
 
 Figure 12.7 – Throughput versus parallel efficiency for ViT training on the tiny-224 dataset.
 
