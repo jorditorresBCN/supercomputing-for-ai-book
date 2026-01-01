@@ -5,7 +5,10 @@ nav_order: 1
 has_children: false
 ---
 
-# Supercomputing Basics
+# 1. Supercomputing Basics
+
+1. TOC
+{:toc}
 
 This chapter provides a conceptual introduction to supercomputing and
 performance-oriented thinking. It establishes the vocabulary and mental
