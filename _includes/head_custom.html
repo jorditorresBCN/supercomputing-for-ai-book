@@ -1,35 +1,61 @@
 <style>
-  /* centrat d'imatges dins del llibre */
+  /* 1. Centrar imágenes del contenido */
   .main-content img {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    max-width: 100%; /* Crec que és per a que no surti de la pantalla en mòbils */
+    max-width: 100%;
   }
 
-
-  /* Això afecta a H4 que es veia petit (####) */
+  /* 2. Títulos H4 (Corregido el tamaño) */
   .main-content h4 {
-    text-transform: none;  /* força treure majuscules */
-    font-weight: bold;      
-    font-size: 3.9em;      
-    color: #505050;        /* gris fosc elegant que m'agrada */
-    margin-top: 20px;      
-    margin-bottom: 10px;   
-    letter-spacing: normal; 
+    text-transform: none;
+    font-weight: bold;
+    font-size: 1.1em;   /* He cambiado 3.9em por 1.1em */
+    color: #505050;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    letter-spacing: normal;
   }
 
-  /* Forçar que el logo (la portada) es vegi gran */
+  /* 3. PEUS DE FOTO (Opcional, estilo gris para cursivas) */
+  .main-content p strong em, 
+  .main-content p em strong {
+    display: block;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    font-weight: normal;
+    font-size: 0.9em;
+    margin-top: -10px;
+  }
+  
+  /* 4. TASKS (Cajas grises para tareas con >) */
+  .main-content blockquote {
+    border-left: 5px solid #505050;
+    background-color: #f6f8fa;
+    color: #24292e;
+    padding: 15px 20px;
+    margin: 20px 0;
+    font-style: normal;
+    font-size: 0.95em;
+  }
+  .main-content blockquote h4 {
+    margin-top: 0;
+  }
+
+  /* 5. BARRA LATERAL: Portada grande */
   .site-brand img {
-    max-height: none !important; /* Treu el límit d'altura per defecte */
-    width: 100% !important;      /* Que ocupi tot l'ample de la columna */
-    max-width: 200px !important; /* Però que no es passi de 200px */
-    margin-bottom: 15px;         /* Espai sota la foto */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Opcional: una ombra elegant */
+    max-height: none !important;
+    width: 100% !important;
+    max-width: 220px !important; /* Un poco más grande */
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
   }
 
-  /* Estil per a la descripció (la referència del llibre) */
+  /* Ocultar el título de texto de la barra lateral (porque ya sale en la foto) */
   .site-brand .site-title {
-    display: none; /* Oculta el títol de text si ja tens la foto de portada amb el títol */
+    display: none;
   }
 </style>
