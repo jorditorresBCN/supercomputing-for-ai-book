@@ -7,6 +7,7 @@ has_children: false
 
 # 1. Supercomputing Basics
 
+* TOC
 {:toc}
 
 This chapter provides a conceptual introduction to supercomputing and
