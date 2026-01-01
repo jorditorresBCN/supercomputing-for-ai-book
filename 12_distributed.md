@@ -753,23 +753,23 @@ This distinction is critical in real HPC environments, where resource allocation
 
 Understanding when more GPUs stop providing meaningful benefits is therefore essential for making informed and responsible scaling decisions in practice.
 
-Task 12.3 – Investigate Diminishing Returns in Training Time
-
-Using the training time measurements obtained for micro-224 and tiny-224, analyze how total training time decreases as more GPUs are added.
-
-Use Table 12.4 and the corresponding tiny-224 results as the basis for your analysis.
-
-What to reason about (conceptual):
-
-Identify where diminishing returns become evident and answer explicitly:
-
-• Why does training time stop improving beyond a certain GPU count?
-
-• Which components of the training workflow contribute to this saturation?
-
-List at least three contributing factors (e.g., I/O, synchronization, validation, logging) and discuss their impact from a pipeline perspective.
-
-Finally, explain the practical implications of these observations for HPC users allocating large GPU resources.
+>Task 12.3 – Investigate Diminishing Returns in Training Time
+>
+>Using the training time measurements obtained for micro-224 and tiny-224, analyze >how total training time decreases as more GPUs are added.
+>
+>Use Table 12.4 and the corresponding tiny-224 results as the basis for your >analysis.
+>
+>What to reason about (conceptual):
+>
+>Identify where diminishing returns become evident and answer explicitly:
+>
+>• Why does training time stop improving beyond a certain GPU count?
+>
+>• Which components of the training workflow contribute to this saturation?
+>
+>List at least three contributing factors (e.g., I/O, synchronization, validation, >logging) and discuss their impact from a pipeline perspective.
+>
+>Finally, explain the practical implications of these observations for HPC users >allocating large GPU resources.
 
 Once diminishing returns in training time have been identified, the next question is no longer technical but strategic: given these trade-offs, how should one choose the scale of an experiment in practice?
 
