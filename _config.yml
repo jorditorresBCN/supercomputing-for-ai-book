@@ -1,0 +1,27 @@
+# _config.yml
+
+url: https://JordiTorresBCN.github.io
+baseurl: "/supercomputing-for-ai-book"
+
+title: Supercomputing for AI
+description: Foundations, Architectures, and Scaling Deep Learning Workloads
+author: Jordi Torres
+
+
+# Configuración del Tema "Just the Docs"
+remote_theme: just-the-docs/just-the-docs
+
+plugins:
+  - jekyll-remote-theme
+
+# Configuración visual
+logo: "/assets/images/logo/media/image1.png"  # Ajustaremos esto si la imagen del logo tiene otro nombre
+color_scheme: dark  # O 'light', como prefieras
+
+# Navegación
+aux_links:
+  "Torres.ai":
+    - "https://www.torres.ai"
+
+# Opciones de Build
+exclude: [Chapter01.docx, Chapter12.docx, Titulo.docx, Gemfile, Gemfile.lock]
