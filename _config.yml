@@ -1,27 +1,25 @@
 # _config.yml
 
-url: https://JordiTorresBCN.github.io
+# --- Configuración básica (Mantenemos lo que funcionaba) ---
+url: "https://JordiTorresBCN.github.io"
 baseurl: "/supercomputing-for-ai-book"
-
 title: Supercomputing for AI
 description: Foundations, Architectures, and Scaling Deep Learning Workloads
 author: Jordi Torres
 
-
-# Configuración del Tema "Just the Docs"
+# --- El Tema ---
 remote_theme: just-the-docs/just-the-docs
 
+# --- SOLUCIÓN PROBLEMA 1: Forzar tema claro (fondo blanco) ---
+color_scheme: light
+
+# --- SOLUCIÓN PROBLEMA 2: Configurar resaltado de código ---
+kramdown:
+  syntax_highlighter: rouge
+
+# --- Plugins necesarios ---
 plugins:
   - jekyll-remote-theme
 
-# Configuración visual
-logo: "/assets/images/logo/media/image1.png"  # Ajustaremos esto si la imagen del logo tiene otro nombre
-color_scheme: dark  # O 'light', como prefieras
-
-# Navegación
-aux_links:
-  "Torres.ai":
-    - "https://www.torres.ai"
-
-# Opciones de Build
-exclude: [Chapter01.docx, Chapter12.docx, Titulo.docx, Gemfile, Gemfile.lock]
+# --- Archivos a ignorar ---
+exclude: [Chapter01.docx, Chapter12.docx, Titulo.docx, Gemfile, Gemfile.lock, assets/css]
