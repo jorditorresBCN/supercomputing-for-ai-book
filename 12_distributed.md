@@ -70,7 +70,7 @@ Let us now examine these components in more detail through a concrete scenario: 
 
 <img src="assets/images/ch12/media/image1.png" style="width:5.11875in;height:5.22292in" alt="A diagram of a software process AI-generated content may be incorrect." />
 
-Figure 12.1 – Distributed training in PyTorch: layered architecture and execution flow. The figure highlights the separation between fixed, one-time coordination steps (resource allocation via SLURM and process launch and rendezvous via torchrun) and the recurring training pipeline executed at each iteration (computation with DDP and gradient synchronization via NCCL).
+*Figure 12.1 – Distributed training in PyTorch: layered architecture and execution flow. The figure highlights the separation between fixed, one-time coordination steps (resource allocation via SLURM and process launch and rendezvous via torchrun) and the recurring training pipeline executed at each iteration (computation with DDP and gradient synchronization via NCCL).*
 
 Conceptually, torchrun belongs to the *job startup and coordination phase*, not to the per-iteration training loop. For this reason, it should be understood as a *fixed-cost component* of distributed execution rather than as a performance optimization mechanism.
 
@@ -125,7 +125,7 @@ A visual representation of this workflow, assuming a single node with four GPUs,
 
 <img src="assets/images/ch12/media/image2.png" style="width:5.11875in;height:1.93889in" alt="A diagram of a computer system AI-generated content may be incorrect." />
 
-Figure 12.2 – Data-parallel training with DDP on a single node with four GPUs*.* Each GPU runs a separate process and receives different input batches. After the forward and backward passes, gradients are synchronized across processes to ensure consistent model updates.
+*Figure 12.2 – Data-parallel training with DDP on a single node with four GPUs. Each GPU runs a separate process and receives different input batches. After the forward and backward passes, gradients are synchronized across processes to ensure consistent model updates.*
 
 PyTorch DDP supports multiple communication backends for synchronizing gradients between processes. If NCCL is not available, MPI is used in HPC environments where MPI is already part of the software stack. or Gloo, a collective communication library developed by Meta.
 
@@ -475,7 +475,7 @@ As shown in Table 12.1, training throughput increases significantly as the numbe
 
 <img src="assets/images/ch12/media/image4.png" style="width:5.11875in;height:2.88958in" alt="A graph with numbers and a bar AI-generated content may be incorrect." />
 
-Figure 12.4 – Training throughput (images per second) as a function of the number of GPUs for the micro-224 dataset.
+*Figure 12.4 – Training throughput (images per second) as a function of the number of GPUs for the micro-224 dataset.*
 
 To better assess scalability, Figure 12.5 reports the measured speedup relative to the single-GPU baseline, together with the ideal linear speedup. While speedup increases steadily, the gap with respect to the ideal curve widens as more GPUs are added, indicating growing overheads.
 
