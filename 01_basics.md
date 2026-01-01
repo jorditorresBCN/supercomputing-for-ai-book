@@ -5,9 +5,8 @@ nav_order: 1
 has_children: false
 ---
 
-# 1. Supercomputing Basics
+# 01. Supercomputing Basics
 
-1. TOC
 {:toc}
 
 This chapter provides a conceptual introduction to supercomputing and
