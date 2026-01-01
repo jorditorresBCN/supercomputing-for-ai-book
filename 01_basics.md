@@ -5,7 +5,7 @@ nav_order: 1
 has_children: false
 ---
 
-# 01. Supercomputing Basics
+# 1. Supercomputing Basics
 
 {:toc}
 
