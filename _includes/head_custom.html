@@ -1,5 +1,5 @@
 <style>
-  /* 1. centrat d'imatges */
+  /* centrat d'imatges dins del llibre */
   .main-content img {
     display: block;
     margin-left: auto;
@@ -8,15 +8,28 @@
   }
 
 
-  /* Això afecta a H4 (####) */
+  /* Això afecta a H4 que es veia petit (####) */
   .main-content h4 {
     text-transform: none;  /* força treure majuscules */
     font-weight: bold;      
-    font-size: 2.9em;      
+    font-size: 3.9em;      
     color: #505050;        /* gris fosc elegant que m'agrada */
     margin-top: 20px;      
     margin-bottom: 10px;   
     letter-spacing: normal; 
   }
-  
+
+  /* Forçar que el logo (la portada) es vegi gran */
+  .site-brand img {
+    max-height: none !important; /* Treu el límit d'altura per defecte */
+    width: 100% !important;      /* Que ocupi tot l'ample de la columna */
+    max-width: 200px !important; /* Però que no es passi de 200px */
+    margin-bottom: 15px;         /* Espai sota la foto */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Opcional: una ombra elegant */
+  }
+
+  /* Estil per a la descripció (la referència del llibre) */
+  .site-brand .site-title {
+    display: none; /* Oculta el títol de text si ja tens la foto de portada amb el títol */
+  }
 </style>
