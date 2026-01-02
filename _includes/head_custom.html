@@ -1,4 +1,18 @@
 <style>
+/* 1. FORZAR LOGO GIGANTE */
+  .site-brand img {
+    max-height: none !important;  /* Quita el límite de altura */
+    width: 100% !important;       /* Ocupa todo el ancho */
+    max-width: 220px !important;  /* Tamaño máximo razonable */
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  /* 2. OCULTAR EL TÍTULO DE TEXTO (para que no salga duplicado al lado del logo) */
+  .site-brand .site-title {
+    display: none !important;
+  }
 
   /* 2. Ajustar títulos H4 del contenido */
   .main-content h4 {
@@ -15,3 +29,23 @@
     max-width: 100%;
   }
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var contentToAdd = `
+        <div style="font-size:0.80em; color:#555; line-height:1.4; margin-top:10px; padding-bottom:15px; border-bottom:1px solid #eee;">
+            <strong>Reference:</strong><br>
+            Jordi Torres, <i>Supercomputing for Artificial Intelligence</i>, 
+            WATCH THIS SPACE Book Series, 2025.<br><br>
+            <a href="https://www.amazon.com/dp/B0DJCMK8W1" target="_blank" 
+               style="text-decoration:none; color:#0066cc; font-weight:bold;">
+               Buy on Amazon ↗
+            </a>
+        </div>
+    `;
+    var logoContainer = document.querySelector('.site-brand');
+    if(logoContainer) {
+        logoContainer.insertAdjacentHTML('beforeend', contentToAdd);
+    }
+});
+</script>
