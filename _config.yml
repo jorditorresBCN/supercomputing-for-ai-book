@@ -7,7 +7,9 @@ baseurl: "/supercomputing-for-ai-book"
 # Ruta exacta de tu logo
 logo: "assets/images/logo/media/bookCover.jpg"
 
-remote_theme: just-the-docs/just-the-docs
+#remote_theme: just-the-docs/just-the-docs
+remote_theme: pages-themes/cayman
+
 color_scheme: light
 
 kramdown:
