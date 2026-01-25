@@ -1,22 +1,21 @@
 <style>
-/* 1. FORZAR LOGO GIGANTE */
+  /* 1. Agrandar la Portada (Logo) */
   .site-brand img {
-    max-height: none !important;  /* Quita el límite de altura */
-    width: 100% !important;       /* Ocupa todo el ancho */
-    max-width: 220px !important;  /* Tamaño máximo razonable */
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
+    max-height: none !important;
+    width: 100% !important;
+    max-width: 200px !important;
+    margin-bottom: 5px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   }
-
-  /* 2. OCULTAR EL TÍTULO DE TEXTO (para que no salga duplicado al lado del logo) */
+  
+  /* Ocultar el título de texto de la barra lateral (ya sale en la foto) */
   .site-brand .site-title {
-    display: none !important;
+    display: none;
   }
 
   /* 2. Ajustar títulos H4 del contenido */
   .main-content h4 {
-    font-size: 2.1em;
+    font-size: 1.1em;
     font-weight: bold;
     color: #505050;
     margin-top: 20px;
@@ -32,20 +31,23 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    var contentToAdd = `
-        <div style="font-size:0.80em; color:#555; line-height:1.4; margin-top:10px; padding-bottom:15px; border-bottom:1px solid #eee;">
-            <strong>Reference:</strong><br>
+    // Definimos el texto que quieres mostrar
+    var textoReferencia = `
+        <div style="font-size:0.85em; color:#333; line-height:1.4; margin-bottom:20px;">
+            <br>
+            <b>Reference:</b><br>
             Jordi Torres, <i>Supercomputing for Artificial Intelligence</i>, 
-            WATCH THIS SPACE Book Series, 2025.<br><br>
-            <a href="https://www.amazon.com/dp/B0DJCMK8W1" target="_blank" 
-               style="text-decoration:none; color:#0066cc; font-weight:bold;">
-               Buy on Amazon ↗
-            </a>
+            WATCH THIS SPACE Book Series, 2025.<br>
+            <span style="font-size:0.9em; color:#666;">ISBN 979-831932835-9</span>
+            <br><br>
+            <a href="https://www.amazon.com/dp/B0DJCMK8W1" target="_blank" style="text-decoration:underline; color:#0366d6;">Buy on Amazon</a>
         </div>
     `;
-    var logoContainer = document.querySelector('.site-brand');
-    if(logoContainer) {
-        logoContainer.insertAdjacentHTML('beforeend', contentToAdd);
+
+    // Buscamos la zona del logo e inyectamos el texto justo después
+    var logoArea = document.querySelector('.site-brand');
+    if(logoArea) {
+        logoArea.insertAdjacentHTML('beforeend', textoReferencia);
     }
 });
 </script>

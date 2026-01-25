@@ -4,12 +4,10 @@ author: Jordi Torres
 url: "https://JordiTorresBCN.github.io"
 baseurl: "/supercomputing-for-ai-book"
 
-# Ruta exacta de tu logo
-logo: "assets/images/logo/media/bookCover.jpg"
+# Ruta logo
+logo: "/images/Supercomputing_for_AI_BookCover.jpg"
 
 remote_theme: just-the-docs/just-the-docs
-#remote_theme: pages-themes/cayman
-
 color_scheme: light
 
 kramdown:
@@ -18,4 +16,4 @@ kramdown:
 plugins:
   - jekyll-remote-theme
 
-exclude: [Chapter01.docx, Chapter12.docx, Titulo.docx, Gemfile, Gemfile.lock, assets/css]
+exclude: [Gemfile, Gemfile.lock]
