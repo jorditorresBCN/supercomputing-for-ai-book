@@ -5,7 +5,7 @@ url: "https://JordiTorresBCN.github.io"
 baseurl: "/supercomputing-for-ai-book"
 
 # Ruta logo
-logo: "/images/Supercomputing_for_AI_BookCover.jpg"
+logo: "/images/Supercomputing_for_AI_BookCover.png"
 
 remote_theme: just-the-docs/just-the-docs
 color_scheme: light
