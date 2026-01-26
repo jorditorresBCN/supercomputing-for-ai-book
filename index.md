@@ -4,7 +4,7 @@ title: "Home"
 nav_order: 0
 ---
 
-<img src="images/Supercomputing_for_AI_BookCover.png∫"  alt="Supercomputing for Artificial Intelligence. WATCH THIS SPACE BOOK SERIES - BARCELONA " />
+<img src="images/Supercomputing_for_AI_BookCover.png"  alt="Supercomputing for Artificial Intelligence. WATCH THIS SPACE BOOK SERIES - BARCELONA " />
 
 ### **SUPERCOMPUTING FOR ARTIFICIAL INTELLIGENCE**  
 **Foundations, Architectures, and Scaling Deep Learning**  
