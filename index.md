@@ -17,13 +17,18 @@ _Second edition. January 2026_
 
 ---
 
-**The book is currently available in:** 
-- Digital and print editions via <a href="https://www.amazon.com/Supercomputing-Artificial-Intelligence-Foundations-Architectures/dp/B0F4YMMS7H" target="_blank" rel="noopener">Amazon USA portal</a> and <a href="https://www.amazon.es/Supercomputing-Artificial-Intelligence-Foundations-Architectures/dp/B0F4YMMS7H" target="_blank" rel="noopener">Amazon Spain portal</a>
-- Companion code and experiments on the <a href="https://github.com/jorditorresBCN/supercomputing-for-ai" target="_blank" rel="noopener">GitHub Repository</a>
+### **The book is currently available in:** 
+- **Digital and print editions via <a href="https://www.amazon.com/Supercomputing-Artificial-Intelligence-Foundations-Architectures/dp/B0F4YMMS7H" target="_blank" rel="noopener">Amazon USA portal</a> and <a href="https://www.amazon.es/Supercomputing-Artificial-Intelligence-Foundations-Architectures/dp/B0F4YMMS7H" target="_blank" rel="noopener">Amazon Spain portal</a>**
+- **Companion code and experiments on the <a href="https://github.com/jorditorresBCN/supercomputing-for-ai" target="_blank" rel="noopener">GitHub Repository</a>**
 
 
 ---
 
+**Open Web Version Notice**
+
+This open web version of the book has been automatically generated from the original manuscript using document conversion tools and static site rendering (Pandoc, Markdown, and Jekyll).
+
+As a result, you may notice minor differences compared to the printed edition, particularly in text formatting, typographical details, figure placement, and page-oriented layout. These differences do not affect the technical content of the book. All explanations, examples, figures, and configurations are preserved exactly as in the original edition. We apologize for any inconvenience this may cause.
 
 **License**  
 This book is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0). You are free to copy, distribute, and adapt portions of the work, provided that proper credit is given to the author and source, and no commercial use is made without prior authorization.   For more information on this license, please visit: https://creativecommons.org/licenses/by-nc/4.0/
