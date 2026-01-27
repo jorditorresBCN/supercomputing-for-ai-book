@@ -1,5 +1,57 @@
+<style>
+  /* 1. Agrandar la Portada (Logo) */
+  .site-brand img {
+    max-height: none !important;
+    width: 100% !important;
+    max-width: 200px !important;
+    margin-bottom: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  /* Ocultar el título de texto de la barra lateral (ya sale en la foto) */
+  .site-brand .site-title {
+    display: none;
+  }
 
-<div style="margin-top:2rem; font-size:0.9em; opacity:0.7;">
-  👁 This page visits: <span id="busuanzi_value_page_pv">0</span><br>
-  📘 This book visits: <span id="busuanzi_value_site_pv">0</span>
-</div>
+  /* 2. Ajustar títulos H4 del contenido */
+  .main-content h4 {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #505050;
+    margin-top: 20px;
+  }
+
+  /* 3. Ajustar imágenes del contenido */
+  .main-content img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Definimos el texto que quieres mostrar
+    var textoReferencia = `
+        <div style="font-size:0.85em; color:#333; line-height:1.4; margin-bottom:20px;">
+            <br>
+            <b>Reference:</b><br>
+            Jordi Torres, <i>Supercomputing for Artificial Intelligence</i>, 
+            WATCH THIS SPACE Book Series, 2025.<br>
+            <span style="font-size:0.9em; color:#666;">ISBN 979-831932835-9</span>
+            <br><br>
+            <a href="https://www.amazon.com/dp/B0DJCMK8W1" target="_blank" style="text-decoration:underline; color:#0366d6;">Buy on Amazon</a>
+        </div>
+    `;
+
+    // Buscamos la zona del logo e inyectamos el texto justo después
+    var logoArea = document.querySelector('.site-brand');
+    if(logoArea) {
+        logoArea.insertAdjacentHTML('beforeend', textoReferencia);
+    }
+});
+</script>
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
