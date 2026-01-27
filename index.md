@@ -38,3 +38,7 @@ AI-based tools such as Google Translate, ChatGPT, Google NotebookLM, Google Gemi
 
 **How to cite this book**  
 Torres, Jordi. (2025). *Supercomputing for Artificial Intelligence: Foundations, Architectures, and Scaling Deep Learning. WATCH THIS SPACE Book Series – Barcelona*. Amazon KDP. ISBN 979-831932835-9.
+
+**Site visits:** <span id="busuanzi_value_site_pv">0</span>  
+
+**This page visits:** <span id="busuanzi_value_page_pv">0</span>
